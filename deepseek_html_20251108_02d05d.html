@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Bài giảng Đường Elip - Ellipse Lesson</title>
+    <style>
+        :root {
+            --primary: #4a6fa5;
+            --secondary: #ff7e5f;
+            --accent: #6b5b95;
+            --light: #f8f9fa;
+            --dark: #343a40;
+            --success: #28a745;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+            color: var(--dark);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        
+        header {
+            background: linear-gradient(to right, var(--primary), var(--accent));
+            color: white;
+            padding: 30px;
+            text-align: center;
+            border-bottom: 5px solid var(--secondary);
+        }
+        
+        h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+        }
+        
+        .subtitle {
+            font-size: 1.2rem;
+            opacity: 0.9;
+        }
+        
+        .language-toggle {
+            display: flex;
+            justify-content: center;
+            margin-top: 15px;
+        }
+        
+        .lang-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            padding: 8px 20px;
+            margin: 0 5px;
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-weight: bold;
+        }
+        
+        .lang-btn.active {
+            background-color: white;
+            color: var(--primary);
+        }
+        
+        .content {
+            display: flex;
+            flex-wrap: wrap;
+            padding: 20px;
+        }
+        
+        .theory-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            background-color: var(--light);
+            border-radius: 10px;
+            margin-right: 20px;
+            margin-bottom: 20px;
+        }
+        
+        .interactive-section {
+            flex: 1;
+            min-width: 300px;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        h2 {
+            color: var(--primary);
+            margin-bottom: 15px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+        }
+        
+        h3 {
+            color: var(--accent);
+            margin: 15px 0 10px;
+        }
+        
+        p {
+            margin-bottom: 15px;
+        }
+        
+        .definition {
+            background-color: #e8f4fd;
+            padding: 15px;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            margin: 15px 0;
+        }
+        
+        .equation {
+            background-color: #f0f0f0;
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+            margin: 10px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 1.1rem;
+        }
+        
+        .canvas-container {
+            width: 100%;
+            max-width: 500px;
+            height: 400px;
+            border: 2px solid var(--primary);
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 20px;
+            background-color: #f9f9f9;
+        }
+        
+        canvas {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        
+        .controls {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            width: 100%;
+        }
+        
+        .control-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin: 0 10px;
+        }
+        
+        label {
+            margin-bottom: 5px;
+            font-weight: bold;
+            color: var(--accent);
+        }
+        
+        input[type="range"] {
+            width: 150px;
+        }
+        
+        .value-display {
+            margin-top: 5px;
+            font-weight: bold;
+            color: var(--primary);
+        }
+        
+        .examples {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .example {
+            flex: 1;
+            min-width: 200px;
+            padding: 15px;
+            background-color: #f0f8ff;
+            border-radius: 8px;
+            text-align: center;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .example:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .example h4 {
+            color: var(--secondary);
+            margin-bottom: 10px;
+        }
+        
+        footer {
+            text-align: center;
+            padding: 20px;
+            background-color: var(--dark);
+            color: white;
+            margin-top: 20px;
+        }
+        
+        @media (max-width: 768px) {
+            .content {
+                flex-direction: column;
+            }
+            
+            .theory-section {
+                margin-right: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1 id="title">Đường Elip - Ellipse</h1>
+            <p class="subtitle" id="subtitle">Khám phá hình dạng và tính chất của đường elip</p>
+            <div class="language-toggle">
+                <button class="lang-btn active" id="lang-vi">Tiếng Việt</button>
+                <button class="lang-btn" id="lang-en">English</button>
+            </div>
+        </header>
+        
+        <div class="content">
+            <section class="theory-section">
+                <h2 id="theory-title">Lý thuyết về Đường Elip</h2>
+                
+                <div class="definition">
+                    <h3 id="definition-title">Định nghĩa</h3>
+                    <p id="definition-text">Đường elip là tập hợp tất cả các điểm M trong mặt phẳng sao cho tổng khoảng cách từ M đến hai điểm cố định F₁ và F₂ (gọi là tiêu điểm) là một hằng số, ký hiệu là 2a (với a > 0).</p>
+                </div>
+                
+                <h3 id="equation-title">Phương trình chính tắc</h3>
+                <div class="equation" id="equation-text">
+                    x²/a² + y²/b² = 1
+                </div>
+                <p id="equation-explanation">Trong đó:
+                <br>- a là nửa độ dài trục lớn
+                <br>- b là nửa độ dài trục nhỏ
+                <br>- c là tiêu cự, với c² = a² - b²
+                <br>- F₁(-c, 0) và F₂(c, 0) là hai tiêu điểm</p>
+                
+                <h3 id="properties-title">Tính chất</h3>
+                <ul id="properties-list">
+                    <li>Tâm đối xứng: gốc tọa độ O</li>
+                    <li>Trục đối xứng: trục Ox và Oy</li>
+                    <li>Đỉnh: A₁(-a, 0), A₂(a, 0), B₁(0, -b), B₂(0, b)</li>
+                    <li>Tiêu điểm: F₁(-c, 0), F₂(c, 0)</li>
+                    <li>Tâm sai: e = c/a (0 < e < 1)</li>
+                </ul>
+                
+                <h3 id="applications-title">Ứng dụng</h3>
+                <p id="applications-text">Đường elip có nhiều ứng dụng trong thực tế như quỹ đạo của các hành tinh, thiết kế kiến trúc, y học (máy tán sỏi thận), và kỹ thuật (anten parabol).</p>
+            </section>
+            
+            <section class="interactive-section">
+                <h2 id="interactive-title">Tương tác với Đường Elip</h2>
+                
+                <div class="canvas-container">
+                    <canvas id="ellipseCanvas"></canvas>
+                </div>
+                
+                <div class="controls">
+                    <div class="control-group">
+                        <label for="a-slider" id="a-label">Bán trục lớn (a):</label>
+                        <input type="range" id="a-slider" min="50" max="200" value="150">
+                        <div class="value-display" id="a-value">150</div>
+                    </div>
+                    
+                    <div class="control-group">
+                        <label for="b-slider" id="b-label">Bán trục nhỏ (b):</label>
+                        <input type="range" id="b-slider" min="30" max="150" value="100">
+                        <div class="value-display" id="b-value">100</div>
+                    </div>
+                </div>
+                
+                <div class="info-panel">
+                    <p id="foci-info">Tiêu điểm: F₁(-111.8, 0) và F₂(111.8, 0)</p>
+                    <p id="eccentricity-info">Tâm sai: e = 0.745</p>
+                </div>
+                
+                <h3 id="examples-title">Ví dụ nhanh</h3>
+                <div class="examples">
+                    <div class="example" id="example-circle">
+                        <h4>Hình tròn</h4>
+                        <p id="example-circle-desc">a = b</p>
+                    </div>
+                    <div class="example" id="example-flat">
+                        <h4>Elip dẹt</h4>
+                        <p id="example-flat-desc">a >> b</p>
+                    </div>
+                    <div class="example" id="example-planet">
+                        <h4>Quỹ đạo hành tinh</h4>
+                        <p id="example-planet-desc">e ≈ 0.8</p>
+                    </div>
+                </div>
+            </section>
+        </div>
+        
+        <footer>
+            <p id="footer-text">Bài giảng tương tác về Đường Elip - Dành cho học sinh Toán lớp 10</p>
+        </footer>
+    </div>
+
+    <script>
+        // Ngôn ngữ
+        const languages = {
+            vi: {
+                title: "Đường Elip - Ellipse",
+                subtitle: "Khám phá hình dạng và tính chất của đường elip",
+                theoryTitle: "Lý thuyết về Đường Elip",
+                definitionTitle: "Định nghĩa",
+                definitionText: "Đường elip là tập hợp tất cả các điểm M trong mặt phẳng sao cho tổng khoảng cách từ M đến hai điểm cố định F₁ và F₂ (gọi là tiêu điểm) là một hằng số, ký hiệu là 2a (với a > 0).",
+                equationTitle: "Phương trình chính tắc",
+                equationText: "x²/a² + y²/b² = 1",
+                equationExplanation: "Trong đó:\n- a là nửa độ dài trục lớn\n- b là nửa độ dài trục nhỏ\n- c là tiêu cự, với c² = a² - b²\n- F₁(-c, 0) và F₂(c, 0) là hai tiêu điểm",
+                propertiesTitle: "Tính chất",
+                propertiesList: [
+                    "Tâm đối xứng: gốc tọa độ O",
+                    "Trục đối xứng: trục Ox và Oy",
+                    "Đỉnh: A₁(-a, 0), A₂(a, 0), B₁(0, -b), B₂(0, b)",
+                    "Tiêu điểm: F₁(-c, 0), F₂(c, 0)",
+                    "Tâm sai: e = c/a (0 < e < 1)"
+                ],
+                applicationsTitle: "Ứng dụng",
+                applicationsText: "Đường elip có nhiều ứng dụng trong thực tế như quỹ đạo của các hành tinh, thiết kế kiến trúc, y học (máy tán sỏi thận), và kỹ thuật (anten parabol).",
+                interactiveTitle: "Tương tác với Đường Elip",
+                aLabel: "Bán trục lớn (a):",
+                bLabel: "Bán trục nhỏ (b):",
+                fociInfo: "Tiêu điểm: ",
+                eccentricityInfo: "Tâm sai: e = ",
+                examplesTitle: "Ví dụ nhanh",
+                exampleCircle: "Hình tròn",
+                exampleCircleDesc: "a = b",
+                exampleFlat: "Elip dẹt",
+                exampleFlatDesc: "a >> b",
+                examplePlanet: "Quỹ đạo hành tinh",
+                examplePlanetDesc: "e ≈ 0.8",
+                footerText: "Bài giảng tương tác về Đường Elip - Dành cho học sinh Toán lớp 10"
+            },
+            en: {
+                title: "Ellipse - Đường Elip",
+                subtitle: "Explore the shape and properties of the ellipse",
+                theoryTitle: "Ellipse Theory",
+                definitionTitle: "Definition",
+                definitionText: "An ellipse is the set of all points M in a plane such that the sum of the distances from M to two fixed points F₁ and F₂ (called foci) is constant, denoted as 2a (with a > 0).",
+                equationTitle: "Standard Equation",
+                equationText: "x²/a² + y²/b² = 1",
+                equationExplanation: "Where:\n- a is the semi-major axis\n- b is the semi-minor axis\n- c is the focal distance, with c² = a² - b²\n- F₁(-c, 0) and F₂(c, 0) are the two foci",
+                propertiesTitle: "Properties",
+                propertiesList: [
+                    "Center of symmetry: origin O",
+                    "Axes of symmetry: Ox and Oy axes",
+                    "Vertices: A₁(-a, 0), A₂(a, 0), B₁(0, -b), B₂(0, b)",
+                    "Foci: F₁(-c, 0), F₂(c, 0)",
+                    "Eccentricity: e = c/a (0 < e < 1)"
+                ],
+                applicationsTitle: "Applications",
+                applicationsText: "Ellipses have many practical applications such as planetary orbits, architectural design, medicine (kidney stone lithotripsy), and engineering (parabolic antennas).",
+                interactiveTitle: "Interact with the Ellipse",
+                aLabel: "Semi-major axis (a):",
+                bLabel: "Semi-minor axis (b):",
+                fociInfo: "Foci: ",
+                eccentricityInfo: "Eccentricity: e = ",
+                examplesTitle: "Quick Examples",
+                exampleCircle: "Circle",
+                exampleCircleDesc: "a = b",
+                exampleFlat: "Flat Ellipse",
+                exampleFlatDesc: "a >> b",
+                examplePlanet: "Planetary Orbit",
+                examplePlanetDesc: "e ≈ 0.8",
+                footerText: "Interactive Ellipse Lesson - For 10th Grade Math Students"
+            }
+        };
+
+        // Biến toàn cục
+        let currentLang = 'vi';
+        let a = 150;
+        let b = 100;
+        
+        // Khởi tạo
+        document.addEventListener('DOMContentLoaded', function() {
+            // Thiết lập ngôn ngữ
+            setupLanguage();
+            
+            // Khởi tạo canvas
+            initCanvas();
+            
+            // Thiết lập sự kiện
+            setupEventListeners();
+            
+            // Vẽ elip ban đầu
+            drawEllipse();
+        });
+        
+        function setupLanguage() {
+            const langViBtn = document.getElementById('lang-vi');
+            const langEnBtn = document.getElementById('lang-en');
+            
+            langViBtn.addEventListener('click', function() {
+                setLanguage('vi');
+                langViBtn.classList.add('active');
+                langEnBtn.classList.remove('active');
+            });
+            
+            langEnBtn.addEventListener('click', function() {
+                setLanguage('en');
+                langEnBtn.classList.add('active');
+                langViBtn.classList.remove('active');
+            });
+        }
+        
+        function setLanguage(lang) {
+            currentLang = lang;
+            const texts = languages[lang];
+            
+            // Cập nhật tất cả các phần tử với id tương ứng
+            document.getElementById('title').textContent = texts.title;
+            document.getElementById('subtitle').textContent = texts.subtitle;
+            document.getElementById('theory-title').textContent = texts.theoryTitle;
+            document.getElementById('definition-title').textContent = texts.definitionTitle;
+            document.getElementById('definition-text').textContent = texts.definitionText;
+            document.getElementById('equation-title').textContent = texts.equationTitle;
+            document.getElementById('equation-text').textContent = texts.equationText;
+            document.getElementById('equation-explanation').innerHTML = texts.equationExplanation.replace(/\n/g, '<br>');
+            document.getElementById('properties-title').textContent = texts.propertiesTitle;
+            
+            const propertiesList = document.getElementById('properties-list');
+            propertiesList.innerHTML = '';
+            texts.propertiesList.forEach(item => {
+                const li = document.createElement('li');
+                li.textContent = item;
+                propertiesList.appendChild(li);
+            });
+            
+            document.getElementById('applications-title').textContent = texts.applicationsTitle;
+            document.getElementById('applications-text').textContent = texts.applicationsText;
+            document.getElementById('interactive-title').textContent = texts.interactiveTitle;
+            document.getElementById('a-label').textContent = texts.aLabel;
+            document.getElementById('b-label').textContent = texts.bLabel;
+            document.getElementById('examples-title').textContent = texts.examplesTitle;
+            document.getElementById('example-circle').querySelector('h4').textContent = texts.exampleCircle;
+            document.getElementById('example-circle-desc').textContent = texts.exampleCircleDesc;
+            document.getElementById('example-flat').querySelector('h4').textContent = texts.exampleFlat;
+            document.getElementById('example-flat-desc').textContent = texts.exampleFlatDesc;
+            document.getElementById('example-planet').querySelector('h4').textContent = texts.examplePlanet;
+            document.getElementById('example-planet-desc').textContent = texts.examplePlanetDesc;
+            document.getElementById('footer-text').textContent = texts.footerText;
+            
+            // Cập nhật thông tin elip
+            updateEllipseInfo();
+        }
+        
+        function initCanvas() {
+            const canvas = document.getElementById('ellipseCanvas');
+            const ctx = canvas.getContext('2d');
+            
+            // Thiết lập kích thước canvas
+            canvas.width = canvas.offsetWidth;
+            canvas.height = canvas.offsetHeight;
+        }
+        
+        function setupEventListeners() {
+            // Sliders
+            const aSlider = document.getElementById('a-slider');
+            const bSlider = document.getElementById('b-slider');
+            const aValue = document.getElementById('a-value');
+            const bValue = document.getElementById('b-value');
+            
+            aSlider.addEventListener('input', function() {
+                a = parseInt(this.value);
+                aValue.textContent = a;
+                drawEllipse();
+                updateEllipseInfo();
+            });
+            
+            bSlider.addEventListener('input', function() {
+                b = parseInt(this.value);
+                bValue.textContent = b;
+                drawEllipse();
+                updateEllipseInfo();
+            });
+            
+            // Ví dụ nhanh
+            document.getElementById('example-circle').addEventListener('click', function() {
+                a = 150;
+                b = 150;
+                aSlider.value = a;
+                bSlider.value = b;
+                aValue.textContent = a;
+                bValue.textContent = b;
+                drawEllipse();
+                updateEllipseInfo();
+            });
+            
+            document.getElementById('example-flat').addEventListener('click', function() {
+                a = 180;
+                b = 60;
+                aSlider.value = a;
+                bSlider.value = b;
+                aValue.textContent = a;
+                bValue.textContent = b;
+                drawEllipse();
+                updateEllipseInfo();
+            });
+            
+            document.getElementById('example-planet').addEventListener('click', function() {
+                a = 160;
+                b = 100;
+                aSlider.value = a;
+                bSlider.value = b;
+                aValue.textContent = a;
+                bValue.textContent = b;
+                drawEllipse();
+                updateEllipseInfo();
+            });
+        }
+        
+        function drawEllipse() {
+            const canvas = document.getElementById('ellipseCanvas');
+            const ctx = canvas.getContext('2d');
+            const width = canvas.width;
+            const height = canvas.height;
+            
+            // Xóa canvas
+            ctx.clearRect(0, 0, width, height);
+            
+            // Tính toán tâm và tỷ lệ
+            const centerX = width / 2;
+            const centerY = height / 2;
+            const scale = Math.min(width / (a * 2.2), height / (b * 2.2));
+            
+            // Vẽ trục tọa độ
+            ctx.strokeStyle = '#cccccc';
+            ctx.lineWidth = 1;
+            ctx.beginPath();
+            ctx.moveTo(0, centerY);
+            ctx.lineTo(width, centerY);
+            ctx.moveTo(centerX, 0);
+            ctx.lineTo(centerX, height);
+            ctx.stroke();
+            
+            // Vẽ đường elip
+            ctx.strokeStyle = '#4a6fa5';
+            ctx.lineWidth = 3;
+            ctx.beginPath();
+            
+            for (let angle = 0; angle <= 2 * Math.PI; angle += 0.01) {
+                const x = centerX + a * scale * Math.cos(angle);
+                const y = centerY + b * scale * Math.sin(angle);
+                
+                if (angle === 0) {
+                    ctx.moveTo(x, y);
+                } else {
+                    ctx.lineTo(x, y);
+                }
+            }
+            
+            ctx.stroke();
+            
+            // Vẽ tiêu điểm
+            const c = Math.sqrt(a * a - b * b);
+            const focus1X = centerX - c * scale;
+            const focus2X = centerX + c * scale;
+            const focusY = centerY;
+            
+            ctx.fillStyle = '#ff7e5f';
+            ctx.beginPath();
+            ctx.arc(focus1X, focusY, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            ctx.beginPath();
+            ctx.arc(focus2X, focusY, 6, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Vẽ đỉnh
+            ctx.fillStyle = '#6b5b95';
+            const vertices = [
+                { x: centerX - a * scale, y: centerY }, // A1
+                { x: centerX + a * scale, y: centerY }, // A2
+                { x: centerX, y: centerY - b * scale }, // B1
+                { x: centerX, y: centerY + b * scale }  // B2
+            ];
+            
+            vertices.forEach(vertex => {
+                ctx.beginPath();
+                ctx.arc(vertex.x, vertex.y, 5, 0, 2 * Math.PI);
+                ctx.fill();
+            });
+            
+            // Vẽ nhãn
+            ctx.fillStyle = '#343a40';
+            ctx.font = '14px Arial';
+            ctx.textAlign = 'center';
+            
+            // Nhãn tiêu điểm
+            ctx.fillText('F₁', focus1X, focusY - 15);
+            ctx.fillText('F₂', focus2X, focusY - 15);
+            
+            // Nhãn đỉnh
+            ctx.fillText('A₁', centerX - a * scale, centerY + 20);
+            ctx.fillText('A₂', centerX + a * scale, centerY + 20);
+            ctx.fillText('B₁', centerX + 15, centerY - b * scale);
+            ctx.fillText('B₂', centerX + 15, centerY + b * scale);
+            
+            // Vẽ đường nối từ điểm trên elip đến tiêu điểm
+            const pointAngle = Math.PI / 4; // Góc 45 độ
+            const pointX = centerX + a * scale * Math.cos(pointAngle);
+            const pointY = centerY + b * scale * Math.sin(pointAngle);
+            
+            ctx.strokeStyle = '#28a745';
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 5]);
+            
+            // Đường từ điểm đến F1
+            ctx.beginPath();
+            ctx.moveTo(pointX, pointY);
+            ctx.lineTo(focus1X, focusY);
+            ctx.stroke();
+            
+            // Đường từ điểm đến F2
+            ctx.beginPath();
+            ctx.moveTo(pointX, pointY);
+            ctx.lineTo(focus2X, focusY);
+            ctx.stroke();
+            
+            ctx.setLineDash([]);
+            
+            // Điểm trên elip
+            ctx.fillStyle = '#28a745';
+            ctx.beginPath();
+            ctx.arc(pointX, pointY, 5, 0, 2 * Math.PI);
+            ctx.fill();
+            
+            // Nhãn điểm
+            ctx.fillStyle = '#28a745';
+            ctx.fillText('M', pointX, pointY - 15);
+        }
+        
+        function updateEllipseInfo() {
+            const c = Math.sqrt(a * a - b * b);
+            const e = c / a;
+            
+            const fociText = currentLang === 'vi' 
+                ? `Tiêu điểm: F₁(${-c.toFixed(1)}, 0) và F₂(${c.toFixed(1)}, 0)`
+                : `Foci: F₁(${-c.toFixed(1)}, 0) and F₂(${c.toFixed(1)}, 0)`;
+                
+            const eccentricityText = currentLang === 'vi'
+                ? `Tâm sai: e = ${e.toFixed(3)}`
+                : `Eccentricity: e = ${e.toFixed(3)}`;
+            
+            document.getElementById('foci-info').textContent = fociText;
+            document.getElementById('eccentricity-info').textContent = eccentricityText;
+        }
+    </script>
+</body>
+</html>
